@@ -5,7 +5,7 @@ module.exports = function(app){
     const token = await sign("test", "test", true); 
 
     res
-      .cookie('accessToken', token,  { httpOnly: true, sameSite: 'None', secure: true })
+      .cookie('accessToken', token, { httpOnly: true, sameSite: 'None', secure: true })
       .status(200)
       .send({data: "123"});
   });

@@ -15,7 +15,7 @@ async function verify(token) {
         issuer:  i,
         subject:  s,
         audience:  a,
-        //expiresIn:  "2h",
+        // expiresIn:  "2h",
         algorithms:  ["RS256"]
     };
     const legit = await jwt.verify(token, publicKEY, verifyOptions);

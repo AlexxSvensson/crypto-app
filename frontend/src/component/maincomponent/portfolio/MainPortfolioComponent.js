@@ -1,27 +1,35 @@
 import {makeStyles, Paper, FormControl, InputLabel, Select, MenuItem, Button} from "@material-ui/core";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setCurrentPortfolio, setPortfolios } from "../../../redux/cryptoSlice";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setCurrentPortfolio, setEditMode, setPortfolios } from "../../../redux/cryptoSlice";
 import PortfolioComponent from "./PortfolioComponent";
 import AddNewPortfolioComponent from "./AddNewPortfolioComponent";
+import SelectPortfolioComponent from "./SelectPortfolioComponent";
 
 const useStyles = makeStyles({
   container: {
     padding: "1%",
-    overflow: "hidden"
+    display: "flex"
   },
   innerContainer: {
+    flex: 1,
     display: "flex",
-    height: "95vh",
+    padding: "10% 5% 10% 5%",
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
+  selectContainer: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center"
+  }
 });
 
 function MainPortfolioComponent(props) {
   const styles = useStyles();
-  const dispatch = useDispatch()
-  const portfolios = useSelector((state) => state.cryptoReducer.portfolios);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const portfolios = JSON.parse(localStorage.getItem("portfolios"));
@@ -29,28 +37,24 @@ function MainPortfolioComponent(props) {
       dispatch(setPortfolios({portfolios: portfolios}));
       dispatch(setCurrentPortfolio({index: 0}))
     } else {
-      localStorage.setItem("portfolios", JSON.stringify([]));
+      localStorage.setItem("portfolios", JSON.stringify([{name: "temp", data: []}]));
     }
   }, []);
 
   return (
     <div className={styles.container}>
       <Paper elevation={8} className={styles.innerContainer}>
+        <div className={styles.selectContainer}>
+          <SelectPortfolioComponent/>
+          <Button 
+            color="primary" 
+            variant="contained"
+            onClick={() => dispatch(setEditMode({value: true}))}
+            >
+            Edit
+          </Button>
+        </div>
         <AddNewPortfolioComponent/>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Cryptos</InputLabel>
-          <Select
-            label="crypto"
-            defaultValue={'0'}
-            onChange={(event) => dispatch(setCurrentPortfolio({index: event.target.value}))}
-          >
-            {
-              portfolios.map((item, index) => {
-                return <MenuItem key={index} value={index}>{index}</MenuItem>
-              })
-            }
-          </Select>
-        </FormControl>
         <PortfolioComponent/>
       </Paper>
     </div>

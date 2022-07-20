@@ -7,7 +7,7 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     padding: "1%",
-    height: "95vh",
+    height: "80vh",
   },
   innerContainer: {
     flex: 1,

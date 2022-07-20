@@ -5,7 +5,7 @@ export const cryptoSlice = createSlice({
   initialState: {
     priceList: {},
     cryptoNames: [],
-    portfolios: [],
+    portfolios: [{name: "new", data: []}],
     currentPortfolio: [],
     tempPortfolio: [],
     currentPortfolioIndex: 0,

@@ -1,17 +1,14 @@
 import {makeStyles, Button} from "@material-ui/core";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setCurrentPortfolio, setPortfolios, setEditMode } from "../../../redux/cryptoSlice";
+import { setCurrentPortfolio, setPortfolios, setEditMode, setTempPortfolio } from "../../../redux/cryptoSlice";
 import AddCryptoToPortfolioComponent from "./AddCryptoToPortfolioComponent";
 import CryptoListComponent from "./CryptoListComponent";
 
 const useStyles = makeStyles({
   container: {
-    display: "flex",
-    flexDirection: "column",
-    paddingLeft: "5%",
-    paddingRight: "5%",
-    paddingTop: "2%"
+    flex: 1,
+    marginTop: "10px",
   },
   innnerContainer: {
     flex: 1,
@@ -19,31 +16,15 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
   },
-  amountTextField: {
-    width: "33%",
-    '& input:disabled': {
-      color: 'black',
-    },
-  },
-  listContainer: {
-    width: "100%",
-    maxHeight: "75%",
-  },
-  list: {
-    listStyleType: "none",
-    padding: 0,
-    maxHeight: "90%",
-    overflowY: "scroll",
-    listStylePosition: "none",
-  },
-  listItem: {
-    margin: 0
-  },
   editButtonContainer: {
-    maxWidth: "50px",
     alignSelf: "flex-start",
-    justifySelf: "start"
-  }
+    display: "flex",
+  },
+  cancelButton: {
+    backgroundColor: "red",
+    color: "white",
+    marginLeft: "10%"
+  },
 });
 
 function PortfolioComponent() {
@@ -53,12 +34,12 @@ function PortfolioComponent() {
   const cryptoPrices = useSelector((state) => state.cryptoReducer.priceList);
   const currentPortfolioIndex = useSelector((state) => state.cryptoReducer.currentPortfolioIndex);
   const tempPortfolio = useSelector((state) => state.cryptoReducer.tempPortfolio);
+  const currentPortfolio = useSelector((state) => state.cryptoReducer.currentPortfolio);
   const editMode = useSelector((state) => state.cryptoReducer.editMode);
 
 
   const onSavePortfolio = () => {
     if (editMode) {
-      console.log(tempPortfolio)
       let newPortfolios = JSON.parse(localStorage.getItem("portfolios")).map((item, index) => {
         if (index === currentPortfolioIndex) {
           return tempPortfolio;
@@ -73,20 +54,35 @@ function PortfolioComponent() {
     dispatch(setEditMode({value: !editMode}));
   };
 
+  const onCancelPortfolioChange = () => {
+    dispatch(setEditMode({value: false}));
+    dispatch(setTempPortfolio({portfolio: currentPortfolio}))
+  }
+
   return (
     <div className = {styles.container}>
       <div className = {styles.innnerContainer}>
+        {
+        editMode &&
         <div className={styles.editButtonContainer}>
           <Button 
             color={"primary"} 
             variant={"contained"}
             onClick={() => onSavePortfolio()}
           >
-            { editMode ? "Save" : "Edit" }
+            Save
           </Button>
+          <Button 
+            className={styles.cancelButton} 
+            variant={"contained"}
+            onClick={() => onCancelPortfolioChange()}
+          >
+            Cancel
+        </Button>
         </div>
+        }
         {
-          tempPortfolio.length !== 0 && cryptoPrices.cryptos &&
+          cryptoPrices.cryptos &&
           <CryptoListComponent/>
         }
         {

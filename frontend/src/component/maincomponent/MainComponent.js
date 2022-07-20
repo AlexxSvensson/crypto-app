@@ -1,21 +1,18 @@
-import {makeStyles} from "@material-ui/core"
+import {Button, makeStyles} from "@material-ui/core"
 import MainPortfolioComponent from "./portfolio/MainPortfolioComponent";
 import CryptoRankingList from "./ranking/CryptoRankingList";
-import { useEffect, useState } from "react";
+import BackgroundComponent from "../background/BackgroundComponent";
+import { useEffect, useState, useRef } from "react";
 import socketIOClient from "socket.io-client";
 import { setCryptoPrices } from "../../redux/cryptoSlice";
 import { useSelector, useDispatch } from 'react-redux'
 
 const useStyles = makeStyles({
   container: {
-    backgroundColor: "black",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    padding: "1%",
-    height: "95vh",
+
   }, 
   innerContainer: {
+    marginTop: "100px",
     display: "grid",
     gridTemplateColumns: "50% 50%",
   },
@@ -34,6 +31,7 @@ function MainComponent() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    fetch('http://localhost:3001/test')
     if (socket === null)
       setSocket(socketIOClient("http://127.0.0.1:3001"));
 

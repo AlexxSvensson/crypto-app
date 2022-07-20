@@ -1,39 +1,47 @@
 import {makeStyles, Button, TextField} from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import { setPortfolios } from "../../../redux/cryptoSlice";
 
 const useStyles = makeStyles({
   container: {
     display: "flex",
-    alignItems: "flex-start",
-    justifyContent: "space-around"
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: "10px"
+  },
+  button: {
+    marginLeft: "5%"
   },
 });
 
 function AddNewPortfolioComponent() {
   const styles = useStyles();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [name, setName] = useState("");
   const portfolios = useSelector((state) => state.cryptoReducer.portfolios);
 
   const addNewPortfolio = () => {
-    localStorage.setItem("portfolios", JSON.stringify([...portfolios, []]));
-    dispatch(setPortfolios({portfolios: [...portfolios, []]}));
+    localStorage.setItem("portfolios", JSON.stringify([...portfolios, {name: name, data: []}]));
+    dispatch(setPortfolios({portfolios: [...portfolios, {name: name, data: []}]}));
+    setName("");
   };
 
   return (
     <div className={styles.container}>
       <TextField
-        className={styles.amountTextField}
-        id="amount"
-        onChange={(event) => console.log(event.target.value)}
-        defaultValue={""}
+        label="Add new portfolio..."
+        id="standard-helperText"
+        onChange={(event) => setName(event.target.value)}
+        value={name}
         placeholder={"name"}
-      />
+        />
       <Button 
+        className={styles.button}
         color={"primary"} 
         variant={"contained"} 
         onClick={addNewPortfolio}>
-          New
+          Add
       </Button>
     </div>
   );

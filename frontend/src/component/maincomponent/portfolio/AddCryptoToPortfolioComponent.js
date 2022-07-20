@@ -49,13 +49,20 @@ function AddCryptoToPortfolioComponent(props) {
   };
 
   const addToPortfolio = () => {
-    if (tempPortfolio.filter(item => item.short === selectedCrypto).length) {
+    if (tempPortfolio.data.filter(item => item.short === selectedCrypto).length) {
       alert(selectedCrypto + " already in portfolio.");
       return;
     }
     const crypto = cryptoPrices.cryptos[selectedCrypto]
     if (crypto)
-      dispatch(setTempPortfolio({portfolio: [...tempPortfolio, {short: selectedCrypto, name: crypto.name, amount: selectedAmount}]}));
+      dispatch(
+        setTempPortfolio({
+          portfolio: {
+            name: tempPortfolio.name, 
+            data: [...tempPortfolio.data, {short: selectedCrypto, name: crypto.name, amount: selectedAmount}]
+          }
+        })
+      );
   };
 
   return (

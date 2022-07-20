@@ -12,13 +12,12 @@ const useStyles = makeStyles({
   },
   listContainer: {
     width: "100%",
-    maxHeight: "75%",
+    maxHeight: "50vh",
+    overflowY: "auto",
   },
   list: {
     listStyleType: "none",
     padding: 0,
-    maxHeight: "90%",
-    overflowY: "scroll",
     listStylePosition: "none",
   },
   listItem: {
@@ -38,7 +37,10 @@ function CryptoListComponent() {
     return (
       <ul className = {styles.list}>
         {
-          tempPortfolio.map((item, index) => {
+          tempPortfolio.data && tempPortfolio.data.length !== 0 &&
+          tempPortfolio.data.map((item, index) => {
+            console.log(item)
+            console.log(cryptoPrices.cryptos)
             return (
               <li key={index} className={styles.listItem}> 
                 <TextField
@@ -72,7 +74,7 @@ function CryptoListComponent() {
   }, [tempPortfolio, editMode])
 
   const changeTempPortfolioAmount = (amount, short) => {
-    const newT = tempPortfolio.map((item) => {
+    const newT = tempPortfolio.data.map((item) => {
       if (item.short === short) {
         const updatedItem = {
           ...item,
@@ -82,7 +84,7 @@ function CryptoListComponent() {
       }
       return item;
     })
-    dispatch(setTempPortfolio({portfolio: newT}));
+    dispatch(setTempPortfolio({portfolio: { name: tempPortfolio.name, data: newT}}));
   };
 
   return (

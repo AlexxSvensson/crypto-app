@@ -31,10 +31,6 @@ function MainComponent() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const test = async () => {
-      const res = await fetch('http://127.0.0.1:3001/test', {credentials: 'include'});
-    }
-    test();
     if (socket === null)
       setSocket(socketIOClient("http://127.0.0.1:3001"));
 

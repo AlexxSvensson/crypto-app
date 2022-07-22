@@ -22,7 +22,7 @@ async function sign(id, username, isAdmin) {
         issuer:  i,
         subject:  s,
         audience:  a,
-        expiresIn:  "24h",
+        expiresIn:  "30s",
         algorithm:  "RS256" 
     };
 

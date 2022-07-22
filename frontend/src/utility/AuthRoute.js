@@ -8,17 +8,15 @@ function AuthRoute({children: children, ...props}) {
       credentials: 'include'
     });
     const res = await response.json();
-    console.log(res.data)
-    return res.data;
+    if (res.success) {
+      setElem(children);
+    } else {
+      setElem(<Navigate to={'/login'}/>);
+    }
   }
 
   useEffect(() => {
-    const v = validateToken();
-    if (v) {
-      setElem(children);
-    } else {
-      setElem(<Navigate to={`/`}/>);
-    }
+    validateToken();
   });
 
   return (

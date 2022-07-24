@@ -1,6 +1,5 @@
 const startUp = () => {
   const express = require('express');
-  const https = require('https');
   const cors = require('cors');
   const cookieParser = require('cookie-parser')
   require('dotenv/config');
@@ -19,21 +18,26 @@ const startUp = () => {
   }
   app.use(cors(corsOptions));
   app.set('port', process.env.PORT || 3001);
-  require('./src/routes/index')(app);
-  
+  //
+  require("./src/mail/sendMail")();
+
+  //
   const server = app.listen(app.get("port"), () => {
-    interval = require("./src/setUpCMCinterval")(io, interval);
     console.log("Server is running");
+    interval = require("./src/setUpCMCinterval")(io, interval, cryptos); //setup CMC api thing
+    require('./src/connectDB')().then((db) => {
+      require('./src/routes/index')(app, db); //setup routes
+    }); //setup db
   });
   
   const io = require('socket.io')(server, {
-      cors: {
-        origin: '*',
-      }
+    cors: {
+      origin: '*',
+    }
   });
   
   io.on("connection", (socket) => {
-      console.log(socket.id, "connected");
+    console.log(socket.id, "connected");
       socket.emit("connection", {cryptos: cryptos});
   })
 };

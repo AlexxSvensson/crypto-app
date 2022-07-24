@@ -2,6 +2,7 @@ import {makeStyles, Paper, FormControl, InputLabel, Input, FormHelperText, Butto
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Alert } from '@material-ui/lab/';
+import { register } from "../../utility/api";
 
 const useStyles = makeStyles({
   container: {
@@ -59,7 +60,7 @@ function RegisterComponent(props) {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [alert, setAlert] = useState(null);
 
-  const register = async () => {
+  const handleRegister = async () => {
     if (!repeatPassword || !password || !username) {
       setAlert(
         <Alert className={styles.alert} severity="error">Fields can't be empty.</Alert>
@@ -70,19 +71,18 @@ function RegisterComponent(props) {
         <Alert className={styles.alert} severity="error">Passwords must match.</Alert>
       );
       return;
+    } else if (password.length < 6) {
+      setAlert(
+        <Alert className={styles.alert} severity="error">Passwords must be at least six characters.</Alert>
+      );
+      return;
+    } else if (username.length < 4) {
+      setAlert(
+        <Alert className={styles.alert} severity="error">Username must be at least four characters.</Alert>
+      );
+      return;
     }
-    const response = await fetch("http://127.0.0.1:3001/login", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        username: username,
-        password: password
-      })
-    });
-    const data = await response.json();
+    const data = await register(username, password);
     if (data.success) {
       navigate("/");
     } else {
@@ -130,7 +130,7 @@ function RegisterComponent(props) {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => register()}
+            onClick={() => handleRegister()}
           >
             Register
           </Button>

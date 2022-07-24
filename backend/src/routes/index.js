@@ -1,9 +1,9 @@
 var fs = require('fs');
 
-module.exports = function(app){
+module.exports = function(app, db){
     fs.readdirSync(__dirname).forEach(function(file) {
         if (file == "index.js") return;
         var name = file.substring(0, file.indexOf('.'));
-        require('./' + name)(app);
+        require('./' + name)(app, db);
     });
 }

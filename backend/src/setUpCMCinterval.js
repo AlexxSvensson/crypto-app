@@ -1,4 +1,5 @@
-module.exports = function(io, interval) {
+module.exports = function(io, interval, cryptos) {
+  const https = require('https');
   if (interval === null) {
     interval = setInterval(async () => {
       https.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=' + process.env.API_KEY, (res) => {

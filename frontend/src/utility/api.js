@@ -41,7 +41,7 @@ export const register = async (username, password) => {
       credentials: "include",
       body: JSON.stringify({
         username: username,
-        password: password
+        password: password,
       })
     });
   } catch (err) {
